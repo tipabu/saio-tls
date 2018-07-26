@@ -7,6 +7,8 @@ info:
 	[ ! -f saio.crt ] || openssl x509 -text -noout -in saio.crt
 
 %.key:
+	@echo
+	@echo "Creating key file $@"
 	openssl genrsa -out $@ 2048
 
 ca.crt: ca.conf ca.key
