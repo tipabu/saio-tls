@@ -86,6 +86,53 @@ Getting Started
    auth_prefix = /auth/
    ```
 
+Testing with PyKMIP
+-------------------
+
+1. Generate certificates
+
+   ```
+   make kmip
+   ```
+
+1. Start KMIP server
+
+   ```
+   mkdir -p pykmip-policies
+   mkdir -p /var/log/pykmip
+   cat << EOF > pykmip-server.conf
+   [server]
+   hostname = 127.0.0.1
+   port = 5696
+   ca_path=ca.crt
+   certificate_path=kmip-server.pem
+   key_path=kmip-server.pem
+   auth_suite = TLS1.2
+   policy_path = pykmip-policies
+   logging_level=DEBUG
+   EOF
+   python -m kmip.services.server.server -f pykmip-server.conf &
+   ```
+
+1. Configure KMIP client
+
+   ```
+   cat << EOF > pykmip-client.conf
+   [client]
+   host = 127.0.0.1
+   port = 5696
+   ca_certs = ca.crt
+   certfile = kmip-client.pem
+   keyfile = kmip-client.pem
+   EOF
+   ```
+
+1. Create AES-256 key
+
+   ```
+   python -m kmip.demos.pie.create -a AES -l 256 -s pykmip-client.conf
+   ```
+
 ---
 
 #### Why include a certificate authority? Why not just use self-signed certificates?

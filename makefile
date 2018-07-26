@@ -1,10 +1,13 @@
 default: saio.pem
-.PHONY: default info clean
+kmip: kmip-server.pem kmip-client.pem
+.PHONY: default info clean kmip
 
 info:
 	[ ! -f ca.crt ] || openssl x509 -text -noout -in ca.crt
 	[ ! -f saio.csr ] || openssl req -text -noout -in saio.csr
-	[ ! -f saio.crt ] || openssl x509 -text -noout -in saio.crt
+	[ ! -f saio.pem ] || openssl x509 -text -noout -in saio.pem
+	[ ! -f kmip-server.pem ] || openssl x509 -text -noout -in kmip-server.pem
+	[ ! -f kmip-client.pem ] || openssl x509 -text -noout -in kmip-client.pem
 
 %.key:
 	@echo
@@ -16,23 +19,26 @@ ca.crt: ca.conf ca.key
 	@echo "Creating self-signed CA certificate"
 	openssl req -new -x509 -config $< -key ca.key -days 3650 -out $@
 
-saio.csr: saio.conf saio.key
+%.csr: %.conf %.key
 	@echo
-	@echo "Creating SAIO certificate request"
-	openssl req -new -config $< -key saio.key -out $@
+	@echo "Creating certificate request $@"
+	openssl req -new -config $*.conf -key $*.key -out $@
 
-saio.crt: ca.crt saio.csr saio.conf
+%.crt: ca.crt %.csr %.conf
 	@echo
-	@echo "Signing SAIO certificate"
+	@echo "Signing certificate %@"
 	[ -f ca.srl ] || date '+%s' > ca.srl
 	openssl x509 -CA ca.crt -CAkey ca.key \
-	-extfile saio.conf -extensions ext -days 365 \
-	-req -in saio.csr -out $@
+	-extfile $*.conf -extensions ext -days 365 \
+	-req -in $*.csr -out $@
 
-saio.pem: saio.crt saio.key
+%.pem: %.crt %.key
 	@echo
-	@echo "Creating SAIO certificate+key PEM file"
+	@echo "Creating certificate+key PEM file $@"
 	cat $^ > $@
 
 clean:
-	rm -f ca.key ca.crt ca.srl saio.key saio.csr saio.crt
+	rm -f ca.key ca.crt ca.srl
+	rm -f saio.key saio.csr saio.crt saio.pem
+	rm -f kmip-server.key kmip-server.csr kmip-server.crt kmip-server.pem
+	rm -f kmip-client.key kmip-client.csr kmip-client.crt kmip-client.pem

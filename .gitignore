@@ -6,3 +6,13 @@ saio.key
 saio.csr
 saio.crt
 saio.pem
+
+kmip-server.key
+kmip-server.csr
+kmip-server.crt
+kmip-server.pem
+
+kmip-client.key
+kmip-client.csr
+kmip-client.crt
+kmip-client.pem
