@@ -17,7 +17,7 @@ info:
 ca.crt: ca.conf ca.key
 	@echo
 	@echo "Creating self-signed CA certificate"
-	openssl req -new -x509 -config $< -key ca.key -days 3650 -out $@
+	openssl req -sha512 -new -x509 -config $< -key ca.key -days 3650 -out $@
 
 %.csr: %.conf %.key
 	@echo
@@ -30,7 +30,7 @@ ca.crt: ca.conf ca.key
 	[ -f ca.srl ] || date '+%s' > ca.srl
 	openssl x509 -CA ca.crt -CAkey ca.key \
 	-extfile $*.conf -extensions ext -days 365 \
-	-req -in $*.csr -out $@
+	-sha512 -req -in $*.csr -out $@
 
 %.pem: %.crt %.key
 	@echo
