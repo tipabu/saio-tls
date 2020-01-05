@@ -38,7 +38,7 @@ ca.crt: ca.conf ca.key
 	cat $^ > $@
 
 clean:
-	rm -f ca.key ca.crt ca.srl
+	rm -f ca.key ca.crt ca.pem ca.srl
 	rm -f saio.key saio.csr saio.crt saio.pem
 	rm -f kmip-server.key kmip-server.csr kmip-server.crt kmip-server.pem
 	rm -f kmip-client.key kmip-client.csr kmip-client.crt kmip-client.pem

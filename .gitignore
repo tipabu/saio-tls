@@ -1,5 +1,6 @@
 ca.key
 ca.crt
+ca.pem
 ca.srl
 
 saio.key
