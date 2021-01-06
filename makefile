@@ -12,7 +12,8 @@ info:
 %.key:
 	@echo
 	@echo "Creating key file $@"
-	openssl genrsa -out $@ 2048
+	#openssl genrsa -out $@ 2048
+	openssl genpkey -algorithm EC -pkeyopt ec_paramgen_curve:secp521r1 -pkeyopt ec_param_enc:explicit -out $@
 
 ca.crt: ca.conf ca.key
 	@echo
