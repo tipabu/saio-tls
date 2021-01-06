@@ -17,3 +17,13 @@ kmip-client.key
 kmip-client.csr
 kmip-client.crt
 kmip-client.pem
+
+memcache-server.key
+memcache-server.csr
+memcache-server.crt
+memcache-server.pem
+
+memcache-client.key
+memcache-client.csr
+memcache-client.crt
+memcache-client.pem

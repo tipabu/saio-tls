@@ -1,6 +1,7 @@
 default: saio.pem
 kmip: kmip-server.pem kmip-client.pem
-.PHONY: default info clean kmip
+memcache: memcache-server.pem memcache-client.pem
+.PHONY: default info clean kmip memcache
 
 info:
 	[ ! -f ca.crt ] || openssl x509 -text -noout -in ca.crt
@@ -8,6 +9,8 @@ info:
 	[ ! -f saio.pem ] || openssl x509 -text -noout -in saio.pem
 	[ ! -f kmip-server.pem ] || openssl x509 -text -noout -in kmip-server.pem
 	[ ! -f kmip-client.pem ] || openssl x509 -text -noout -in kmip-client.pem
+	[ ! -f memcache-server.pem ] || openssl x509 -text -noout -in memcache-server.pem
+	[ ! -f memcache-client.pem ] || openssl x509 -text -noout -in memcache-client.pem
 
 %.key:
 	@echo
@@ -43,3 +46,5 @@ clean:
 	rm -f saio.key saio.csr saio.crt saio.pem
 	rm -f kmip-server.key kmip-server.csr kmip-server.crt kmip-server.pem
 	rm -f kmip-client.key kmip-client.csr kmip-client.crt kmip-client.pem
+	rm -f memcache-server.key memcache-server.csr memcache-server.crt memcache-server.pem
+	rm -f memcache-client.key memcache-client.csr memcache-client.crt memcache-client.pem
